@@ -1,0 +1,6 @@
+DataBaseName=postgres
+DatabaseUser=postgres
+DatabasePassword=mortall1994
+Url=jdbc:postgresql://localhost:5432/postgres
+UrlToSchema=jdbc:postgresql://localhost:5432/
+ClassName:org.postgresql.Driver
