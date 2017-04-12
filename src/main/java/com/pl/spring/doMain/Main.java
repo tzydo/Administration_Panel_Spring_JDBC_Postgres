@@ -10,7 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @Data
-public class Main extends Application {
+public class Main extends Application{
 
     private static LoginWindowController loginWindowController;
     public static ApplicationContext context;

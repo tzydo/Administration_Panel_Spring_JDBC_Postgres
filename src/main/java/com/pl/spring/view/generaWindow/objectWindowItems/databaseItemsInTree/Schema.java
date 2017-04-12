@@ -100,7 +100,6 @@ public class Schema extends TreeItem<Label> {
 
     public void loadSchema() {
 
-
             String sql = "SELECT nspname FROM pg_catalog.pg_namespace " +
                     "WHERE nspname != 'pg_toast' AND nspname != 'pg_temp_1' " +
                     "AND nspname!= 'pg_toast_temp_1' AND nspname != 'pg_catalog' " +
@@ -111,7 +110,8 @@ public class Schema extends TreeItem<Label> {
             getChildren().clear();  //usuwanie wszystkiego z listy zeby uniknac powtorzen
 
                 list.forEach(s -> {
-                    getChildren().add(new SchemaTreeItem(new Label(s.toString()),jdbcTemplate));
+                    getChildren().add(new SchemaTreeItem
+                            (new Label(s.toString()),jdbcTemplate,statisticWindow));
                 });
 
 

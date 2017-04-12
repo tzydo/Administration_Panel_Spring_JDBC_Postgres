@@ -1,6 +1,7 @@
 package com.pl.spring.view.generaWindow.objectWindowItems;
 
 import com.pl.spring.model.User;
+import com.pl.spring.view.generaWindow.GeneralWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.DatabaseItem;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.groupItems.GroupItem;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableSpaceItems.TableSpaceItemLabel;
@@ -97,7 +98,7 @@ public class ObjectWindow extends StackPane{
             databaseList = jdbcTemplate.queryForList(sql,String.class);
             databaseList.forEach(s -> {
                 databaseInAdress.getChildren()
-                        .add(new TreeItemInDatabase(s,jdbcTemplate, user, environment, new DatabaseItem(s.toString(), this),statisticWindow));
+                        .add(new TreeItemInDatabase(s,jdbcTemplate, user, environment, new DatabaseItem(s.toString(), this,this),statisticWindow));
             });
         } catch (Exception ex) {
             System.out.println("blad w procesie ładowania schematu baz w drzewie ObjectWindow");
