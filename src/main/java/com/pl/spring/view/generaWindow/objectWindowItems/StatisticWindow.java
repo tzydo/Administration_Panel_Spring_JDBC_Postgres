@@ -4,11 +4,8 @@ package com.pl.spring.view.generaWindow.objectWindowItems;
 import com.pl.spring.model.RoleView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,6 +23,8 @@ public class StatisticWindow extends StackPane {
     private TabPane tabPane;
     private TableView<RoleView> tableView;
     private ObservableList<SendInfoToTable> data = FXCollections.observableArrayList();
+    private VBox vBox;
+
 
     public StatisticWindow(){
         build();
@@ -44,7 +43,7 @@ public class StatisticWindow extends StackPane {
     }
 
 
-    private VBox vBox;
+
     public  void setValueInProperties(TableView tableView){
         this.tableView = tableView;
         this.tableView.setEditable(true);

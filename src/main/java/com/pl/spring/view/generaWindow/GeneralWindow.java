@@ -47,11 +47,10 @@ public class GeneralWindow {
     private VBox vbox, vBoxInCenter;
     private HBox hbox, hboxInCenter;
     private Stage primaryStage;
-    private Menu fileMenu, editMenu, viewMenu, toolsMenu, helpMenu;
-    private MenuItem fileItemAddChangePassword, fileItemAddExit;
-    private MenuItem editItemNewObject, edititemCreate, editItemDelete, editItemSearch, editItemProperty;
+    private Menu fileMenu, viewMenu, helpMenu;
+    private MenuItem fileItemAddExit;
     private MenuItem viewItemWindowObject, viewItemWindowSql, viewItemToolsToolbar;
-    private MenuItem toolItemConnect, toolItemDisconnectServer, toolItemDisconnectDataBase, toolItemServiceStatus;
+
     private MenuItem helpItemAboutMe;
     private Button connectButton,createNewSerwerButton, refreashButon, editObjectButton, copyButton, deleteButton, sqlCommandButton;
     private MenuBar menuBar;
@@ -79,39 +78,18 @@ public class GeneralWindow {
         menuBar = new MenuBar();
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
         fileMenu = new Menu("Plik");
-        editMenu = new Menu("Edycja");
         viewMenu = new Menu("Widok");
-        toolsMenu = new Menu("Narzedzia");
         helpMenu = new Menu("Pomoc");
 
         //<---------------------File Menu Button------------------------------->
-        fileItemAddChangePassword = new MenuItem("Zmień hasło...");
-        fileItemAddChangePassword.setOnAction(e->{
-//            new ChangePassword(connect);
-        });
-
         fileItemAddExit = new MenuItem("Wyjście");
         fileItemAddExit.setOnAction(e->{
-            connect.closeConectionToDatabase();
             System.exit(0);
         });
-
-
-
-        editItemNewObject = new MenuItem("Nowy Obiekt");
-        edititemCreate = new MenuItem("Utwórz...");
-        editItemDelete = new MenuItem("Usuń/Skasuj");
-        editItemSearch = new MenuItem("Wyszukaj obiekt");
-        editItemProperty = new MenuItem("Właściwości");
 
         viewItemWindowObject = new MenuItem("Okno Obiektu");
         viewItemWindowSql = new MenuItem("Okno SQL");
         viewItemToolsToolbar = new MenuItem("Pasek Narzędzi");
-
-        toolItemConnect = new MenuItem("Połącz");
-        toolItemDisconnectServer = new MenuItem("Rozłącz Server");
-        toolItemDisconnectDataBase = new MenuItem("Rozłącz BazeDanych");
-        toolItemServiceStatus = new MenuItem("Status Servera");
 
         helpItemAboutMe = new MenuItem("O Programie");
         helpItemAboutMe.setOnAction(e->{
@@ -119,18 +97,14 @@ public class GeneralWindow {
             alert.setTitle("About me");
             alert.setHeaderText(null);
             alert.setContentText("I have a great message for you!\n This program was made for test skills :D");
-
             alert.showAndWait();
         });
 
-        fileMenu.getItems().addAll(fileItemAddChangePassword, fileItemAddExit);
-        editMenu.getItems().addAll(editItemNewObject, edititemCreate, editItemDelete, editItemSearch, editItemProperty);
+        fileMenu.getItems().addAll(fileItemAddExit);
         viewMenu.getItems().addAll(viewItemWindowObject, viewItemWindowSql, viewItemToolsToolbar);
-        toolsMenu.getItems().addAll(toolItemConnect, toolItemDisconnectServer, toolItemDisconnectDataBase,
-                toolItemServiceStatus);
         helpMenu.getItems().addAll(helpItemAboutMe);
 
-        menuBar.getMenus().addAll(fileMenu, editMenu, viewMenu, toolsMenu, helpMenu);
+        menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
 
     }
 
@@ -160,13 +134,6 @@ public class GeneralWindow {
         objectWindow.build();
         hboxInCenter.getChildren().addAll(objectWindow,vBoxInCenter);
     }
-
-
-    public void reloadLeftWindow(){
-//        this.left = new ObjectWindow(connect,this,this.left,this.staticWindowController);
-//        hboxInCenter.getChildren().set(0, left);
-    }
-
 
 
     public Scene getScene() {

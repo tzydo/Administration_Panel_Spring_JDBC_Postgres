@@ -67,13 +67,13 @@ public class ObjectWindow extends StackPane{
 
 
 
-        registeredRoleInAdress = new TreeItem<>(new RoleLabel("Zarejestrowane Role",jdbcTemplate,statisticWindow));
+        registeredRoleInAdress = new TreeItem<>(new RoleLabel("Zarejestrowane Role",jdbcTemplate,statisticWindow,this,this));
 
         registeredGroupInAdress = new TreeItem<>(new Label("Grupy Ról"));
         rootItem.setExpanded(true); // widok kolejnego elementu listy
         serwery.setExpanded(true);
 
-        addDatabase(); // dodawanie listy baz danych
+        addDatabase();
         addTableSpace();
         addRoleToTree();
         addGroupToTree();
@@ -119,7 +119,7 @@ public class ObjectWindow extends StackPane{
         sql = "SELECT rolname FROM pg_roles where rolcanlogin = 't' ORDER BY rolname ASC;";
          roleList = jdbcTemplate.queryForList(sql,String.class);
          roleList.forEach(o -> {
-             registeredRoleInAdress.getChildren().addAll(new TreeItem(new RoleItemLabel(o.toString(),jdbcTemplate,statisticWindow)));
+             registeredRoleInAdress.getChildren().addAll(new TreeItem(new RoleItemLabel(o.toString(),jdbcTemplate,statisticWindow,this,this)));
          });
 
 
