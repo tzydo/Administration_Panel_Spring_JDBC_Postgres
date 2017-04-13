@@ -1,4 +1,4 @@
-package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.TableViewToStatisticWindow;
+package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableViewToStatisticWindow;
 
 import com.pl.spring.model.RoleView;
 import com.pl.spring.model.TableModel;

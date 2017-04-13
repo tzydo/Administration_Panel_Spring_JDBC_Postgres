@@ -22,7 +22,6 @@ public class StatisticWindow extends StackPane {
     private Tab property;
     private TabPane tabPane;
     private TableView<RoleView> tableView;
-    private ObservableList<SendInfoToTable> data = FXCollections.observableArrayList();
     private VBox vBox;
 
 

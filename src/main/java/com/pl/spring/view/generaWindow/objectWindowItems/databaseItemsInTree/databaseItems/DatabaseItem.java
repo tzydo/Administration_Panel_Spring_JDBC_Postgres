@@ -1,14 +1,15 @@
-package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree;
+package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.databaseItems;
 
 import com.pl.spring.view.generaWindow.GeneralWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
 import javafx.event.EventHandler;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,14 +21,19 @@ import org.springframework.stereotype.Component;
 public class DatabaseItem extends Label{
 
     private ContextMenu cm;
-    private MenuItem refresh, newTable,delete;
+    private MenuItem refresh,delete;
     private String name;
     private StackPane root;
     private ObjectWindow objectWindow;
+    private JdbcTemplate jdbcTemplate;
 
-    public DatabaseItem(String name, ObjectWindow objectWindow, StackPane root){
+    public DatabaseItem(String name,
+                        ObjectWindow objectWindow,
+                        StackPane root,
+                        JdbcTemplate JdbcTemplate){
         this.setText(name);
 
+        this.jdbcTemplate = JdbcTemplate;
         this.objectWindow = objectWindow;
         this.name = name;
         this.root = root;
@@ -37,7 +43,6 @@ public class DatabaseItem extends Label{
 
         cm = new ContextMenu();
         refresh = new MenuItem("Odświerz");
-        newTable = new MenuItem("Nowa tabela");
         delete = new MenuItem("Usuń");
         refresh.setOnAction(e -> {
             this.objectWindow.build();
@@ -57,10 +62,11 @@ public class DatabaseItem extends Label{
             sql = "DROP DATABASE " + name + ";";
 
             jdbcTemplate.execute(sql);
+            this.objectWindow.build();
             cm.hide();
         });
 
-        cm.getItems().addAll(refresh,newTable,delete);
+        cm.getItems().addAll(refresh,delete);
 
 
 

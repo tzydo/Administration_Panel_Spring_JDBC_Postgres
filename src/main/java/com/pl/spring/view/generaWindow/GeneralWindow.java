@@ -52,7 +52,7 @@ public class GeneralWindow {
     private MenuItem viewItemWindowObject, viewItemWindowSql, viewItemToolsToolbar;
 
     private MenuItem helpItemAboutMe;
-    private Button connectButton,createNewSerwerButton, refreashButon, editObjectButton, copyButton, deleteButton, sqlCommandButton;
+    private Button newDatabase, newTable, refreashButon, newRole, sqlCommandButton;
     private MenuBar menuBar;
 
 
@@ -111,16 +111,13 @@ public class GeneralWindow {
     private void initializeButtonMenu() {
         hbox = new HBox(6);
         hbox.setAlignment(Pos.BASELINE_CENTER);
-        connectButton = new Button("Połącz");
-        createNewSerwerButton = new Button("Nowy Server");
+        newDatabase = new Button("Nowa Baza");
+        newTable = new Button("Nowa Tabela");
         refreashButon = new Button("Odświerz");
-        editObjectButton = new Button("Edycja Obiektu");
-        copyButton = new Button("Kopiuj");
-        deleteButton = new Button("Usuń");
+        newRole = new Button("Nowy Użytkownik");
         sqlCommandButton = new Button("Zapytanie SQL");
 
-        hbox.getChildren().addAll(connectButton,createNewSerwerButton, refreashButon, editObjectButton,
-    copyButton, deleteButton,sqlCommandButton);
+        hbox.getChildren().addAll(newDatabase, newTable, refreashButon, newRole, sqlCommandButton);
 
     }
 

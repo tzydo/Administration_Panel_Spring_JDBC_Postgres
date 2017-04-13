@@ -5,7 +5,7 @@ import com.pl.spring.mapper.Pg_rolesMapper;
 import com.pl.spring.model.Pg_roles;
 import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
-import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.TableViewToStatisticWindow.TableViewListItem;
+import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableViewToStatisticWindow.TableViewListItem;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;

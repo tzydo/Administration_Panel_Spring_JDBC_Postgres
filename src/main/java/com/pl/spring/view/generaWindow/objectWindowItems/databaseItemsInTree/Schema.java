@@ -5,7 +5,7 @@ import com.pl.spring.mapper.TableModelMapper;
 import com.pl.spring.model.TableModel;
 import com.pl.spring.model.User;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
-import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.TableViewToStatisticWindow.TableViewTableModel;
+import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableViewToStatisticWindow.TableViewTableModel;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import lombok.Data;

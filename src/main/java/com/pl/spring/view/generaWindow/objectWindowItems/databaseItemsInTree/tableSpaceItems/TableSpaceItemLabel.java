@@ -3,7 +3,7 @@ package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.ta
 import com.pl.spring.mapper.TableSpaceMapper;
 import com.pl.spring.model.TableSpace;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
-import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.TableViewToStatisticWindow.TableViewSpaceTableItemList;
+import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableViewToStatisticWindow.TableViewSpaceTableItemList;
 import javafx.scene.control.Label;
 import lombok.Data;
 import lombok.NoArgsConstructor;

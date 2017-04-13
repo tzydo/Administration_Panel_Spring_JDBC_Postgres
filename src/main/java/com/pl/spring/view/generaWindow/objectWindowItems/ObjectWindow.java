@@ -1,9 +1,10 @@
 package com.pl.spring.view.generaWindow.objectWindowItems;
 
 import com.pl.spring.model.User;
-import com.pl.spring.view.generaWindow.GeneralWindow;
-import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.DatabaseItem;
+import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.databaseItems.DatabaseItem;
+import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.databaseItems.DatabaseLabel;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.groupItems.GroupItem;
+import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.groupItems.GroupLabel;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableSpaceItems.TableSpaceItemLabel;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.TreeItemInDatabase;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.roleItems.RoleItemLabel;
@@ -48,9 +49,11 @@ public class ObjectWindow extends StackPane{
     private int sceneY = 470;
     private TreeView tree;
     private TreeItem rootItem;
-    private TreeItem serwery,addresDataBase,databaseInAdress, tableSpace,registeredRoleInAdress,registeredGroupInAdress;
-    private List roleList,groupList,spaceList;
+    private TreeItem serwery,addresDataBase,databaseInAdress,
+            tableSpace,registeredRoleInAdress,registeredGroupInAdress;
 
+    private List roleList,groupList,spaceList;
+    private List<String>databaseList;
 
     public void build() {
         tree = new TreeView<>(); // glowny widok drzewa
@@ -62,14 +65,28 @@ public class ObjectWindow extends StackPane{
         serwery = new TreeItem<>(new Label("Servery"));
         addresDataBase = new TreeItem<>(new Label("PostgresSQL"));
 
-        databaseInAdress = new TreeItem<>(new Label("Bazy Danych"));
+        databaseInAdress = new TreeItem<>(
+                new DatabaseLabel("Bazy Danych",
+                        jdbcTemplate,statisticWindow,
+                        this,this));
+
+
         tableSpace = new TreeItem<>(new Label("Przestrzenie Tabel"));
 
 
 
-        registeredRoleInAdress = new TreeItem<>(new RoleLabel("Zarejestrowane Role",jdbcTemplate,statisticWindow,this,this));
+        registeredRoleInAdress = new TreeItem<>(
+                new RoleLabel("Zarejestrowane Role",
+                        jdbcTemplate,statisticWindow,
+                        this,this));
 
-        registeredGroupInAdress = new TreeItem<>(new Label("Grupy Ról"));
+
+        registeredGroupInAdress = new TreeItem<>(
+                new GroupLabel("Grupy Ról",
+                        jdbcTemplate,statisticWindow,
+                        this,this));
+
+
         rootItem.setExpanded(true); // widok kolejnego elementu listy
         serwery.setExpanded(true);
 
@@ -79,8 +96,13 @@ public class ObjectWindow extends StackPane{
         addGroupToTree();
 
         tree.setRoot(rootItem);
-        addresDataBase.getChildren().addAll(databaseInAdress, tableSpace, registeredGroupInAdress,
-                registeredRoleInAdress);
+
+        addresDataBase.getChildren()
+                        .addAll(databaseInAdress,tableSpace,
+                                registeredGroupInAdress,
+                                registeredRoleInAdress);
+
+
         serwery.getChildren().add(addresDataBase);
         rootItem.getChildren().add(serwery);
         getChildren().add(tree);
@@ -91,27 +113,31 @@ public class ObjectWindow extends StackPane{
 
     private void addDatabase() {
         sql = "SELECT datname FROM pg_database WHERE datistemplate = false;";
-
-        List<String>databaseList;
         databaseInAdress.getChildren().clear();
-        try {
-            databaseList = jdbcTemplate.queryForList(sql,String.class);
-            databaseList.forEach(s -> {
-                databaseInAdress.getChildren()
-                        .add(new TreeItemInDatabase(s,jdbcTemplate, user, environment, new DatabaseItem(s.toString(), this,this),statisticWindow));
-            });
-        } catch (Exception ex) {
-            System.out.println("blad w procesie ładowania schematu baz w drzewie ObjectWindow");
 
-        }
+        databaseList = jdbcTemplate.queryForList(sql,String.class);
+        databaseList.forEach(s -> {
+            databaseInAdress
+                        .getChildren()
+                        .add(new TreeItemInDatabase(
+                                s,jdbcTemplate,
+                                user, environment,
+                                new DatabaseItem(s.toString()
+                                        ,this,this,
+                                        jdbcTemplate),statisticWindow));
+        });
+
     }
 
 
     private void addTableSpace() {
         sql = "SELECT spcname FROM pg_tablespace;";
         spaceList = jdbcTemplate.queryForList(sql,String.class);
-        spaceList.forEach(o ->tableSpace.getChildren().add(new TreeItem<>
-                (new TableSpaceItemLabel(o.toString(),jdbcTemplate,statisticWindow))));
+        spaceList.forEach(o ->tableSpace
+                            .getChildren()
+                            .add(new TreeItem<>
+                            (new TableSpaceItemLabel(o.toString(),
+                                    jdbcTemplate,statisticWindow))));
     }
 
 
@@ -119,7 +145,12 @@ public class ObjectWindow extends StackPane{
         sql = "SELECT rolname FROM pg_roles where rolcanlogin = 't' ORDER BY rolname ASC;";
          roleList = jdbcTemplate.queryForList(sql,String.class);
          roleList.forEach(o -> {
-             registeredRoleInAdress.getChildren().addAll(new TreeItem(new RoleItemLabel(o.toString(),jdbcTemplate,statisticWindow,this,this)));
+             registeredRoleInAdress
+                     .getChildren().
+                     addAll(new TreeItem
+                             (new RoleItemLabel(o.toString(),
+                                     jdbcTemplate,statisticWindow,
+                                     this,this)));
          });
 
 
@@ -131,7 +162,12 @@ public class ObjectWindow extends StackPane{
         groupList = jdbcTemplate.queryForList(sql,String.class);
         groupList.forEach(o -> {
             if(!roleList.contains(o.toString())){
-                registeredGroupInAdress.getChildren().addAll(new TreeItem<>(new GroupItem(o.toString(),jdbcTemplate,statisticWindow)));
+                registeredGroupInAdress.getChildren().addAll(
+                        new TreeItem<>(
+                                new GroupItem(o.toString(),
+                                        jdbcTemplate,
+                                        statisticWindow,
+                                        this,this)));
             }
         });
 

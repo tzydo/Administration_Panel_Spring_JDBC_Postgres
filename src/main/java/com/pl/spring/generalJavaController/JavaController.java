@@ -1,18 +1,13 @@
 package com.pl.spring.generalJavaController;
 
-
-import com.pl.spring.SQL.SqlQuerry;
 import com.pl.spring.connection.Connect;
 import com.pl.spring.model.User;
 import com.pl.spring.view.generaWindow.GeneralWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
-import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.DatabaseItem;
-import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.TreeItemInDatabase;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.roleItems.RoleLabel;
 import com.pl.spring.view.generaWindow.objectWindowItems.SqlWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
 import com.pl.spring.view.loginWindow.LoginWindow;
-import javafx.scene.control.TreeItem;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
@@ -85,18 +80,10 @@ public class JavaController {
         return new StatisticWindow();
     }
 
-
-    @Bean
-    public SqlQuerry getSqlQuerry(){
-        return new SqlQuerry();
-    }
-
-
     @Bean
     public SqlWindow getSqlWindow(){
         return new SqlWindow();
     }
-
 
     @Bean
     public RoleLabel getRoleLabel(){return  new RoleLabel();}

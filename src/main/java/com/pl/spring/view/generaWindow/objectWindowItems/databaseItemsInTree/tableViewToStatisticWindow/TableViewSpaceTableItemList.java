@@ -1,6 +1,5 @@
-package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.TableViewToStatisticWindow;
+package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableViewToStatisticWindow;
 
-import com.pl.spring.model.Pg_roles;
 import com.pl.spring.model.RoleView;
 import com.pl.spring.model.TableSpace;
 import javafx.collections.FXCollections;
