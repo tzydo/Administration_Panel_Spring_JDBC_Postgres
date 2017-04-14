@@ -4,8 +4,10 @@ import com.pl.spring.mapper.Pg_rolesMapper;
 import com.pl.spring.model.Pg_roles;
 import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
+import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.ErrorWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableViewToStatisticWindow.TableViewListItem;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -65,8 +67,13 @@ public class GroupItem extends Label{
                     cm.show(stackPane, t.getScreenX(), t.getScreenY());
                     cm.setOnAction(e->{
                         String sql = "DROP GROUP IF EXISTS "+name + ";";
-                        jdbcTemplate.execute(sql);
-                        objectWindow.build();
+                        try{
+                            jdbcTemplate.execute(sql);
+                            objectWindow.build();
+                        }catch (Exception ex){
+                            ErrorWindow errorWindow = new ErrorWindow();
+                        }
+
 
                     });
                 } else {

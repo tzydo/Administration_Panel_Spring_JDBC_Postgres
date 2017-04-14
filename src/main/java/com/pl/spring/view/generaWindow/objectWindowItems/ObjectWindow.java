@@ -56,6 +56,7 @@ public class ObjectWindow extends StackPane{
     private List<String>databaseList;
 
     public void build() {
+
         tree = new TreeView<>(); // glowny widok drzewa
         rootItem = new TreeItem<>(new Label("Grupa Serwerów"));
 
@@ -122,6 +123,7 @@ public class ObjectWindow extends StackPane{
                         .add(new TreeItemInDatabase(
                                 s,jdbcTemplate,
                                 user, environment,
+                                this,this,
                                 new DatabaseItem(s.toString()
                                         ,this,this,
                                         jdbcTemplate),statisticWindow));

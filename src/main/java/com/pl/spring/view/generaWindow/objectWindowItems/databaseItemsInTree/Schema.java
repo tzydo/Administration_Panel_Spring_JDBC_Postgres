@@ -1,13 +1,15 @@
 package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree;
 
 
+import com.pl.spring.createWindows.CreateSchemaWindow;
 import com.pl.spring.mapper.TableModelMapper;
 import com.pl.spring.model.TableModel;
 import com.pl.spring.model.User;
+import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.tableViewToStatisticWindow.TableViewTableModel;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.core.env.Environment;
@@ -29,6 +31,8 @@ public class Schema extends TreeItem<Label> {
     private JdbcTemplate jdbcTemplate;
     private Connection connection;
     private StatisticWindow statisticWindow;
+    private StackPane stackPane;
+    private ObjectWindow objectWindow;
     private User user;
     private Environment environment;
     Set<String> itemsNoRepeat = new TreeSet<>();
@@ -40,19 +44,31 @@ public class Schema extends TreeItem<Label> {
     private TableViewTableModel viewTableModel;
     private  List<TableModel> tableModelList;
 
+    private ContextMenu cm;
+    private MenuItem createSchema;
+
+
     public Schema(String name,
                   String schemaName,
                   User user,
                   Environment environment,
-                  StatisticWindow statisticWindow) {
+                  StatisticWindow statisticWindow,
+                  StackPane stackPane,
+                  ObjectWindow objectWindow) {
 
         this.schemaName = schemaName;
         this.statisticWindow = statisticWindow;
         this.name = name;
         this.user = user;
         this.environment = environment;
+        this.stackPane = stackPane;
+        this.objectWindow = objectWindow;
         schemaLabel = new Label(this.name);
         schemaLabel.setStyle("-fx-background-color : Red");
+        cm = new ContextMenu();
+        createSchema = new MenuItem("Dodaj schemat");
+        cm.getItems().add(createSchema);
+
 
         try {
         connection = DriverManager
@@ -65,8 +81,39 @@ public class Schema extends TreeItem<Label> {
             System.out.println("cos nie tak z polaczeniem w Schema  ");
         }
 
-
+//LADOWANIE ZAWARTOSCI SCHEMATOW I INFO W STATISTIC WINDOW
         schemaLabel.setOnMouseClicked(e -> {
+
+            //TWORZENIE NOWEGO SCHEMATU
+            if(e.getButton().toString().equals("SECONDARY")){
+                cm.show(stackPane, e.getScreenX(), e.getScreenY());
+                cm.setOnAction(ex-> {
+
+                    //Widok okna nowego schematu
+                    CreateSchemaWindow createSchema = new CreateSchemaWindow();
+                    createSchema.getDialog().showAndWait();
+
+                    //Tworzenie schematu
+                    if(!createSchema.getGroupName().getText().toString().equals(null) ||
+                            !createSchema.getGroupName().getText().toString().isEmpty()){
+                        String sql = "Create schema if not exists "+
+                                createSchema.getGroupName().getText().toString() + ";";
+                        try{
+                            jdbcTemplate.execute(sql);
+                        }catch (Exception exception){
+                            //BRAK UPRAWNIEN
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Error!");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Nie masz uprawnien do tworzenia tu schematu");
+                            alert.showAndWait();
+                        }
+
+                    }
+                    objectWindow.build();
+                });
+            }else cm.hide();
+
             loadSchema();
             loadInfoToStatisticWindow();
         });
@@ -111,7 +158,9 @@ public class Schema extends TreeItem<Label> {
 
                 list.forEach(s -> {
                     getChildren().add(new SchemaTreeItem
-                            (new Label(s.toString()),jdbcTemplate,statisticWindow));
+                            (new Label(s.toString()),
+                                    jdbcTemplate,statisticWindow,
+                                    stackPane,objectWindow));
                 });
 
 

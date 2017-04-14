@@ -1,16 +1,14 @@
 package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.groupItems;
 
 
+import com.pl.spring.createWindows.CreateGroupRoleWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Pair;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,37 +49,18 @@ public class GroupLabel extends Label{
 
         //!!!!!!!!!!!!!!!!!!!CREATE ROLE WINDOW!!!!!!!!!!!!!!!!!!!!
         add.setOnAction(e->{
-            Dialog<Pair<String, String>> dialog = new Dialog<>();
-            dialog.setTitle("Create Group Role");
-            dialog.setHeaderText("Create your new Group");
-
-            ButtonType buttonName = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(buttonName, ButtonType.CANCEL);
-
-
-            GridPane grid = new GridPane();
-            grid.setHgap(10);
-            grid.setVgap(10);
-            grid.setPadding(new Insets(20, 150, 10, 10));
-
-            TextField groupName = new TextField();
-            groupName.setPromptText("name");
-
-            grid.add(new Label("Group name:"), 0, 0);
-            grid.add(groupName, 1, 0);
-
-            dialog.getDialogPane().setContent(grid);
-            dialog.showAndWait();
-
+            CreateGroupRoleWindow createRoleWindow = new CreateGroupRoleWindow();
+            createRoleWindow.getDialog().showAndWait();
+            String groupName = createRoleWindow.getGroupName().getText().toString();
             //http://code.makery.ch/blog/javafx-dialogs-official/   <-tutorial
             //!!!!!!!!!!!!!!!!!!!!NEW Group BE NULL OR EMPTY
-            if(groupName.getText().isEmpty()
-                    ||  groupName.getText().equals(null)
-                    ||  groupName.getText().equals("")){
+            if(groupName.isEmpty()
+                    ||  groupName.equals(null)
+                    ||  groupName.equals("")){
                 System.out.println("pusty");
             }else{
-                System.out.println("name :"+ groupName.getText());
-                String sql= "create group "+groupName.getText()+";";
+                System.out.println("name :"+ groupName);
+                String sql= "create group "+groupName+";";
                 jdbcTemplate.execute(sql);
                 objectWindow.build();
             }
