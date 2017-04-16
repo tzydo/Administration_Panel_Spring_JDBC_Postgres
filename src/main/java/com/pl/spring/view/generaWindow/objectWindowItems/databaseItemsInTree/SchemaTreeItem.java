@@ -1,6 +1,8 @@
 package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree;
 
 
+import com.pl.spring.createWindows.CreateColumnWindow;
+import com.pl.spring.createWindows.TableName;
 import com.pl.spring.mapper.TableInfoMapper;
 import com.pl.spring.model.TableInfo;
 import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
@@ -10,7 +12,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SchemaTreeItem extends TreeItem<Label> {
 
@@ -24,7 +28,7 @@ public class SchemaTreeItem extends TreeItem<Label> {
     private ObjectWindow objectWindow;
     private ContextMenu cm,cm2;
     private MenuItem removeTable, removeSchema, addTable;
-
+    private CreateColumnWindow createColumnWindow = null;
 
 
     public SchemaTreeItem(Label schemaLabel,
@@ -43,8 +47,85 @@ public class SchemaTreeItem extends TreeItem<Label> {
         this.cm2 = new ContextMenu();
         removeTable = new MenuItem("Usuń");
         removeSchema = new MenuItem("Usuń");
+        removeSchema.setOnAction(event -> {
+
+                String sql = "Drop schema "+schemaLabel.getText().toString();
+                try{
+                    jdbcTemplate.execute(sql);
+                    objectWindow.build();
+                }catch (Exception exception){
+                    showError();
+                }
+                           cm.hide();
+        });
+
+
         addTable = new MenuItem("Dodaj tabele");
-        cm.getItems().addAll(removeSchema,addTable);
+        addTable.setOnAction(event->{
+        //CREATE TABLE WINDOW
+            String name;
+
+            TableName tableName = new TableName();
+            tableName.getDialog().showAndWait();
+
+            if(!tableName.getName().getText().toString().equals("")){
+                name = tableName.getName().getText().toString();
+
+                List<String> tableInfo = new ArrayList<>();
+
+                do{
+                    createColumnWindow = new CreateColumnWindow();
+                    createColumnWindow.getDialog().showAndWait();
+                    if(!createColumnWindow.getName().getText().toString().isEmpty()){
+                        tableInfo.add(createColumnWindow.getName().getText().toString());
+                        tableInfo.add(createColumnWindow.getSelectedDataType());
+                    }else break;
+                }while(!createColumnWindow.getName().getText().equals(""));
+
+               try{
+                   StringBuilder sql = new StringBuilder();
+                          sql.append("Create table " + name + "(");
+
+                   for(int i=0;i<tableInfo.size();i++){
+                       if(i==(tableInfo.size()-2)){
+                           sql.append(tableInfo.get(i)+" ");
+                           sql.append(tableInfo.get(i+1));
+                           break;
+                       }
+                       if((i%2)!= 0){
+                           sql.append(tableInfo.get(i) + ",");
+                       }else {
+                           sql.append(tableInfo.get(i) + " ");
+                       }
+                   }
+                   sql.append(");");
+
+
+                   //TWORZENIE TABELI QUERRY
+                   System.out.println(sql);
+                   try{
+                       jdbcTemplate.execute(sql.toString());
+                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                       alert.setTitle("Table Create!");
+                       alert.setHeaderText(null);
+                       alert.setContentText("Table create successful!");
+
+                       alert.showAndWait();
+                   }catch (Exception ex){
+
+                   }
+
+               }catch (Exception e){
+                   System.out.println("Blad dodatia tabeli !!!! w schemaTreeItem");
+               }
+
+            }else {
+                System.out.println("pusto");
+            }
+        });
+
+
+        cm.getItems().addAll(addTable,removeSchema);
         cm2.getItems().add(removeTable);
 
         build();
@@ -56,16 +137,6 @@ public class SchemaTreeItem extends TreeItem<Label> {
 
             if(e.getButton().toString().equals("SECONDARY")){
                 cm.show(stackPane, e.getScreenX(), e.getScreenY());
-                cm.setOnAction(click->{
-                    String sql = "Drop schema "+schemaLabel.getText().toString();
-                    try{
-                        jdbcTemplate.execute(sql);
-                        objectWindow.build();
-                    }catch (Exception exception){
-                        showError();
-                    }
-
-                });
             } else {
                 cm.hide();
             }

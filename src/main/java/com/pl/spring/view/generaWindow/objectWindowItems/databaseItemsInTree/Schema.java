@@ -102,11 +102,7 @@ public class Schema extends TreeItem<Label> {
                             jdbcTemplate.execute(sql);
                         }catch (Exception exception){
                             //BRAK UPRAWNIEN
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Error!");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Nie masz uprawnien do tworzenia tu schematu");
-                            alert.showAndWait();
+                            ErrorWindow errorWindow = new ErrorWindow();
                         }
 
                     }
