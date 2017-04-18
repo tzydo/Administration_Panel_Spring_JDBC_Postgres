@@ -1,5 +1,6 @@
 package com.pl.spring.view.generaWindow.objectWindowItems.databaseItemsInTree.databaseItems;
 
+import com.pl.spring.createWindows.CreateDatabaseWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.ObjectWindow;
 import com.pl.spring.view.generaWindow.objectWindowItems.StatisticWindow;
 import javafx.event.EventHandler;
@@ -49,37 +50,18 @@ public class DatabaseLabel extends Label{
 
         //!!!!!!!!!!!!!!!!!!!CREATE ROLE WINDOW!!!!!!!!!!!!!!!!!!!!
         add.setOnAction(e->{
-            Dialog<Pair<String, String>> dialog = new Dialog<>();
-            dialog.setTitle("Create Database");
-            dialog.setHeaderText("Create new Database");
-
-            ButtonType buttonName = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(buttonName, ButtonType.CANCEL);
-
-
-            GridPane grid = new GridPane();
-            grid.setHgap(10);
-            grid.setVgap(10);
-            grid.setPadding(new Insets(20, 150, 10, 10));
-
-            TextField databaseName = new TextField();
-            databaseName.setPromptText("name");
-
-            grid.add(new Label("Database name:"), 0, 0);
-            grid.add(databaseName, 1, 0);
-
-            dialog.getDialogPane().setContent(grid);
-            dialog.showAndWait();
+            CreateDatabaseWindow createDatabaseWindow = new CreateDatabaseWindow();
+            createDatabaseWindow.getDialog().showAndWait();
 
             //http://code.makery.ch/blog/javafx-dialogs-official/   <-tutorial
             //!!!!!!!!!!!!!!!!!!!!NEW Group BE NULL OR EMPTY
-            if(databaseName.getText().isEmpty()
-                    ||  databaseName.getText().equals(null)
-                    ||  databaseName.getText().equals("")){
+            if(createDatabaseWindow.getDatabaseName().getText().isEmpty()
+                    ||  createDatabaseWindow.getDatabaseName().getText().equals(null)
+                    ||  createDatabaseWindow.getDatabaseName().getText().equals("")){
                 System.out.println("pusty");
             }else{
-                System.out.println("name :"+ databaseName.getText());
-                String sql= "create database "+databaseName.getText()+";";
+                System.out.println("name :"+ createDatabaseWindow.getDatabaseName().getText());
+                String sql= "create database "+createDatabaseWindow.getDatabaseName().getText()+";";
                 jdbcTemplate.execute(sql);
                 objectWindow.build();
             }

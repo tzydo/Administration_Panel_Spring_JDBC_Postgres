@@ -42,8 +42,14 @@ public class StatisticWindow extends StackPane {
     }
 
 
+    public void insertDifferent(TextArea textArea){
+        this.property.setContent(textArea);
+        this.setVisible(true);
+    }
+
 
     public  void setValueInProperties(TableView tableView){
+
         this.tableView = tableView;
         this.tableView.setEditable(true);
         this.tableView.setVisible(true);
